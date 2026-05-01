@@ -1,0 +1,13 @@
+[variables]
+main_domain = "${domain}"
+
+[config]
+[[config.domains]]
+serviceName = "router"
+port = 20128
+host = "${main_domain}"
+
+[config.env]
+DATA_DIR = "/app/data"
+PORT = "20128"
+HOSTNAME = "0.0.0.0"

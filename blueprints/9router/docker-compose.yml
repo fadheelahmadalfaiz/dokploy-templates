@@ -1,0 +1,15 @@
+services:
+  router:
+    image: ghcr.io/decolua/9router:latest
+    restart: unless-stopped
+    expose:
+      - 20128
+    environment:
+      - DATA_DIR=/app/data
+      - PORT=20128
+      - HOSTNAME=0.0.0.0
+    volumes:
+      - router-data:/app/data
+
+volumes:
+  router-data:
