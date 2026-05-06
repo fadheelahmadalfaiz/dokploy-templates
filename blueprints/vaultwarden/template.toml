@@ -1,5 +1,7 @@
 [variables]
 main_domain = "${domain}"
+postgres_password = "${password:24}"
+admin_token = "${password:32}"
 
 [config]
 mounts = []
@@ -10,5 +12,26 @@ port = 80
 host = "${main_domain}"
 
 [config.env]
-SIGNUPS_ALLOWED = "true"
 DOMAIN = "https://${main_domain}"
+ADMIN_TOKEN = "${admin_token}"
+DATABASE_URL = "postgresql://vaultwarden:${postgres_password}@db:5432/vaultwarden"
+DISABLE_2FA_REMEMBER = "false"
+DISABLE_ADMIN_TOKEN = "false"
+EMAIL_ATTEMPTS_LIMIT = "3"
+EMERGENCY_ACCESS_ALLOWED = "true"
+PASSWORD_HINTS_ALLOWED = "true"
+POSTGRES_DB = "vaultwarden"
+POSTGRES_PASSWORD = "${postgres_password}"
+POSTGRES_USER = "vaultwarden"
+PUBLIC_DOMAIN = "${main_domain}"
+SENDS_ALLOWED = "true"
+SHOW_PASSWORD_HINT = "true"
+SIGNUPS_ALLOWED = "false"
+SMTP_DEBUG = "false"
+SMTP_FROM = "noreply@${main_domain}"
+SMTP_FROM_NAME = "Vaultwarden"
+SMTP_HOST = "smtp.resend.com"
+SMTP_PASSWORD = "change-me"
+SMTP_PORT = "587"
+SMTP_SECURITY = "starttls"
+SMTP_USERNAME = "resend"
