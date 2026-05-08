@@ -1,0 +1,26 @@
+[variables]
+main_domain = "${domain}"
+jwt_secret = "${password:64}"
+api_key_secret = "${password:64}"
+initial_password = "${password:24}"
+storage_encryption_key = "${password:64}"
+
+[config]
+[[config.domains]]
+serviceName = "omniroute"
+port = 20128
+host = "${main_domain}"
+
+[config.env]
+PORT = "20128"
+DATA_DIR = "/app/data"
+NODE_ENV = "production"
+NEXT_PUBLIC_BASE_URL = "https://${main_domain}"
+AUTH_COOKIE_SECURE = "true"
+JWT_SECRET = "${jwt_secret}"
+API_KEY_SECRET = "${api_key_secret}"
+INITIAL_PASSWORD = "${initial_password}"
+STORAGE_ENCRYPTION_KEY = "${storage_encryption_key}"
+STORAGE_ENCRYPTION_KEY_VERSION = "v1"
+REQUIRE_API_KEY = "true"
+ALLOW_API_KEY_REVEAL = "false"

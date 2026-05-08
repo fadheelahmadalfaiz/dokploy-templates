@@ -1,0 +1,31 @@
+services:
+  omniroute:
+    image: diegosouzapw/omniroute:latest
+    restart: unless-stopped
+    stop_grace_period: 40s
+    environment:
+      - PORT
+      - DATA_DIR
+      - NODE_ENV
+      - NEXT_PUBLIC_BASE_URL
+      - AUTH_COOKIE_SECURE
+      - JWT_SECRET
+      - API_KEY_SECRET
+      - INITIAL_PASSWORD
+      - STORAGE_ENCRYPTION_KEY
+      - STORAGE_ENCRYPTION_KEY_VERSION
+      - REQUIRE_API_KEY
+      - ALLOW_API_KEY_REVEAL
+    volumes:
+      - omniroute-data:/app/data
+    expose:
+      - 20128
+    labels:
+      - "traefik.enable=true"
+      - "traefik.http.routers.omniroute.rule=Host(`${domain}`)"
+      - "traefik.http.routers.omniroute.entrypoints=web,websecure"
+      - "traefik.http.routers.omniroute.tls=true"
+      - "traefik.http.services.omniroute.loadbalancer.server.port=20128"
+
+volumes:
+  omniroute-data:

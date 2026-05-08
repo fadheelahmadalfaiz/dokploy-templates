@@ -4533,6 +4533,27 @@
     ]
   },
   {
+    "id": "omniroute",
+    "name": "OmniRoute",
+    "version": "latest",
+    "description": "Free self-hosted AI gateway with one OpenAI-compatible endpoint, smart provider routing, prompt compression, auto-fallback, dashboard, and multimodal APIs.",
+    "logo": "logo.svg",
+    "links": {
+      "github": "https://github.com/diegosouzapw/OmniRoute",
+      "website": "https://omniroute.online/",
+      "docs": "https://github.com/diegosouzapw/OmniRoute#readme"
+    },
+    "tags": [
+      "ai",
+      "llm",
+      "gateway",
+      "proxy",
+      "router",
+      "openai-compatible",
+      "self-hosted"
+    ]
+  },
+  {
     "id": "onedev",
     "name": "OneDev",
     "version": "11.6.6",
