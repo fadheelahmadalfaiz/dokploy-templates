@@ -1,0 +1,20 @@
+[variables]
+main_domain = "${domain}"
+waha_engine = "WEBJS"
+waha_api_key = "${password:32}"
+waha_dashboard_username = "admin"
+waha_dashboard_password = "${password:32}"
+
+[config]
+env = [
+  "WAHA_HOST=${main_domain}",
+  "WAHA_ENGINE=${waha_engine}",
+  "WAHA_API_KEY=${waha_api_key}",
+  "WAHA_DASHBOARD_USERNAME=${waha_dashboard_username}",
+  "WAHA_DASHBOARD_PASSWORD=${waha_dashboard_password}"
+]
+
+[[config.domains]]
+serviceName = "waha"
+port = 3000
+host = "${main_domain}"

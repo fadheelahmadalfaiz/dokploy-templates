@@ -1,0 +1,24 @@
+services:
+  waha:
+    image: devlikeapro/waha
+    restart: unless-stopped
+    ports:
+      - "3000"
+    volumes:
+      - waha-sessions:/app/.sessions
+      - waha-media:/app/.media
+    environment:
+      - WHATSAPP_DEFAULT_ENGINE=${WAHA_ENGINE}
+      - WAHA_API_KEY=${WAHA_API_KEY}
+      - WAHA_DASHBOARD_USERNAME=${WAHA_DASHBOARD_USERNAME}
+      - WAHA_DASHBOARD_PASSWORD=${WAHA_DASHBOARD_PASSWORD}
+      - WHATSAPP_SWAGGER_USERNAME=${WAHA_DASHBOARD_USERNAME}
+      - WHATSAPP_SWAGGER_PASSWORD=${WAHA_DASHBOARD_PASSWORD}
+      - WAHA_LOG_LEVEL=info
+      - WAHA_LOG_FORMAT=JSON
+      - WAHA_PRINT_QR=True
+      - WAHA_BASE_URL=https://${WAHA_HOST}
+
+volumes:
+  waha-sessions:
+  waha-media:
