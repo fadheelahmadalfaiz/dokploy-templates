@@ -1,0 +1,53 @@
+[variables]
+main_domain = "${domain}"
+secret_key = "${base64:64}"
+encryption_key_salt = "${base64:32}"
+postgres_password = "${password:32}"
+postgres_user = "postgres"
+postgres_db = "brightbean"
+
+[config]
+mounts = []
+
+[[config.domains]]
+serviceName = "brightbean-studio"
+port = 8000
+host = "${main_domain}"
+
+[config.env]
+# Core
+SECRET_KEY = "${secret_key}"
+ENCRYPTION_KEY_SALT = "${encryption_key_salt}"
+DEBUG = "false"
+ALLOWED_HOSTS = "${main_domain},localhost,127.0.0.1"
+APP_URL = "https://${main_domain}"
+
+# Database
+POSTGRES_DB = "${postgres_db}"
+POSTGRES_USER = "${postgres_user}"
+POSTGRES_PASSWORD = "${postgres_password}"
+
+# Storage / cache
+STORAGE_BACKEND = "local"
+REDIS_URL = ""
+SENTRY_DSN = ""
+
+# Email — console by default (no SMTP required to boot).
+# Switch to smtp and fill EMAIL_* vars for real mail.
+EMAIL_BACKEND_TYPE = "console"
+DEFAULT_FROM_EMAIL = "noreply@${main_domain}"
+EMAIL_HOST = ""
+EMAIL_PORT = "587"
+EMAIL_HOST_USER = ""
+EMAIL_HOST_PASSWORD = ""
+EMAIL_USE_TLS = "true"
+
+# Optional Google SSO (user login)
+GOOGLE_AUTH_CLIENT_ID = ""
+GOOGLE_AUTH_CLIENT_SECRET = ""
+
+# Optional Unsplash stock photos in composer
+UNSPLASH_ACCESS_KEY = ""
+
+# Trust Traefik/Cloudflare proxies for client IP / rate limits
+BB_TRUSTED_PROXIES = "*"

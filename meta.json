@@ -879,6 +879,27 @@
     ]
   },
   {
+    "id": "brightbean-studio",
+    "name": "BrightBean Studio",
+    "version": "latest",
+    "description": "Open-source self-hostable social media management platform. Schedule, publish, and manage content across 10+ platforms. Free Buffer/SocialPilot alternative (Django + Postgres).",
+    "logo": "brightbean-studio.png",
+    "links": {
+      "github": "https://github.com/brightbeanxyz/brightbean-studio",
+      "website": "https://brightbean.xyz/studio/",
+      "docs": "https://github.com/brightbeanxyz/brightbean-studio#readme"
+    },
+    "tags": [
+      "social-media",
+      "scheduler",
+      "marketing",
+      "buffer-alternative",
+      "django",
+      "self-hosted",
+      "content-management"
+    ]
+  },
+  {
     "id": "browserless",
     "name": "Browserless",
     "version": "2.23.0",

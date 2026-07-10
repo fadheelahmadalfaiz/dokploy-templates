@@ -1,0 +1,100 @@
+# BrightBean Studio — open-source social media management (Buffer alternative)
+# Source: https://github.com/brightbeanxyz/brightbean-studio
+# Build from upstream GitHub (no official prebuilt image yet).
+# First deploy builds the image (~3–8 min depending on VPS).
+
+x-app-image: &app-image
+  build:
+    context: https://github.com/brightbeanxyz/brightbean-studio.git#main
+    dockerfile: Dockerfile
+
+x-app-env: &app-env
+  DJANGO_SETTINGS_MODULE: config.settings.production
+  SECRET_KEY: ${SECRET_KEY}
+  ENCRYPTION_KEY_SALT: ${ENCRYPTION_KEY_SALT}
+  DEBUG: ${DEBUG}
+  ALLOWED_HOSTS: ${ALLOWED_HOSTS}
+  APP_URL: ${APP_URL}
+  DATABASE_URL: postgres://${POSTGRES_USER}:${POSTGRES_PASSWORD}@brightbean-studio-postgres:5432/${POSTGRES_DB}
+  STORAGE_BACKEND: ${STORAGE_BACKEND}
+  MEDIA_ROOT: /app/media
+  EMAIL_BACKEND_TYPE: ${EMAIL_BACKEND_TYPE}
+  DEFAULT_FROM_EMAIL: ${DEFAULT_FROM_EMAIL}
+  EMAIL_HOST: ${EMAIL_HOST}
+  EMAIL_PORT: ${EMAIL_PORT}
+  EMAIL_HOST_USER: ${EMAIL_HOST_USER}
+  EMAIL_HOST_PASSWORD: ${EMAIL_HOST_PASSWORD}
+  EMAIL_USE_TLS: ${EMAIL_USE_TLS}
+  REDIS_URL: ${REDIS_URL}
+  SENTRY_DSN: ${SENTRY_DSN}
+  GOOGLE_AUTH_CLIENT_ID: ${GOOGLE_AUTH_CLIENT_ID}
+  GOOGLE_AUTH_CLIENT_SECRET: ${GOOGLE_AUTH_CLIENT_SECRET}
+  UNSPLASH_ACCESS_KEY: ${UNSPLASH_ACCESS_KEY}
+  BB_TRUSTED_PROXIES: ${BB_TRUSTED_PROXIES}
+
+services:
+  brightbean-studio-migrate:
+    <<: *app-image
+    command: python manage.py migrate --noinput
+    environment:
+      <<: *app-env
+    depends_on:
+      brightbean-studio-postgres:
+        condition: service_healthy
+    restart: "no"
+
+  brightbean-studio:
+    <<: *app-image
+    command: gunicorn config.wsgi:application --bind 0.0.0.0:8000 --workers 2 --threads 2
+    restart: unless-stopped
+    ports:
+      - "8000"
+    volumes:
+      - brightbean-media:/app/media
+    environment:
+      <<: *app-env
+    depends_on:
+      brightbean-studio-migrate:
+        condition: service_completed_successfully
+      brightbean-studio-postgres:
+        condition: service_healthy
+    healthcheck:
+      test: ["CMD", "curl", "-fsS", "http://127.0.0.1:8000/health/"]
+      interval: 30s
+      timeout: 10s
+      retries: 5
+      start_period: 40s
+
+  brightbean-studio-worker:
+    <<: *app-image
+    command: python manage.py process_tasks
+    restart: unless-stopped
+    volumes:
+      - brightbean-media:/app/media
+    environment:
+      <<: *app-env
+    depends_on:
+      brightbean-studio-migrate:
+        condition: service_completed_successfully
+      brightbean-studio-postgres:
+        condition: service_healthy
+
+  brightbean-studio-postgres:
+    image: postgres:16-alpine
+    restart: unless-stopped
+    environment:
+      POSTGRES_DB: ${POSTGRES_DB}
+      POSTGRES_USER: ${POSTGRES_USER}
+      POSTGRES_PASSWORD: ${POSTGRES_PASSWORD}
+    volumes:
+      - brightbean-postgres:/var/lib/postgresql/data
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U $${POSTGRES_USER} -d $${POSTGRES_DB}"]
+      interval: 5s
+      timeout: 5s
+      retries: 10
+      start_period: 10s
+
+volumes:
+  brightbean-postgres:
+  brightbean-media:
